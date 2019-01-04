@@ -4,23 +4,45 @@ import { Button } from 'react-native-elements';
 
 const searchButton = props => {
 
+    // Check if the url begin with http: or https:
+    this.isValidHTTP = function(httpString)
+    {
+        if ((httpString == "http:") || (httpString == "https:"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     this.getOffset = function(urlToCheck)
     {
 
-        if ((urlToCheck[0] != "http:") || (urlToCheck[0] != "https:") || (urlToCheck[2] != "youtube.com")) 
+        offset = ["", ""];
+
+        // Check if the url is a youtube url
+        if ((!this.isValidHTTP(urlToCheck[0])) || (urlToCheck[1] != "") || (urlToCheck[2] != "www.youtube.com")) 
         {
-            alert("Devi inserire un url valido0000");
-            return;
+            alert("Devi inserire un url valido");
+            return false;
         }
 
+        // Differentiate the case for call the right API
         if (urlToCheck[3] == "user") 
         {
-            return offset["user", urlToCheck[4]]
+            offset[0] = "user";
+            offset[1] = urlToCheck[4];
+            return offset
         } else {
-            return offset["id", urlToCheck[4]]
+            offset[0] = "channel";
+            offset[1] = urlToCheck[4];
+            return offset
         }
+
+        return false
     }
 
+    // This function chek if the url is correct and, if is correct, open the new page
     this.searchButtonHandler = function(url) {
 
         if (url == null)
@@ -32,6 +54,12 @@ const searchButton = props => {
         urlToCheck = url.split("/");
         console.log(urlToCheck);
         offset = this.getOffset(urlToCheck);
+
+        if (offset == false) {
+            alert("Devi inserire un url valido");
+            return
+        }
+
         console.log(offset);
 
     }
